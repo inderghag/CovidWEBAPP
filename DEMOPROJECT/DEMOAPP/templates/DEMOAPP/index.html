@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Covid Stats Tracker</title>
+
+    <link rel="stylesheet" type="text/css" href="{%static 'DEMOAPP/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'DEMOAPP/bootstrap.css' %}">
+
+    <script src="{% static 'DEMOAPP/scripts.js' %}"></script>
+
+</head>
+<body>
+    <div class="headingContainer">
+        <h1>CoronaVirus Stats Tracker</h1>
+    </div>
+
+    <div class="searchElement">
+
+        <form action="getCountry/" autocomplete="off" class="form-inline my-2 my-lg-0" method="GET" >
+            {% csrf_token %}
+            <div class="autocomplete my-2 my-lg-0">
+                <input id="searchedCountry" class="form-control" type="text" placeholder="Search Country" name="searchedCountry">
+            </div>
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="jumbotron">
+        <h1 class="display-3">Tracker Info</h1>
+        <p class="lead">Search countries to find out information about confirmed cases, deaths and recovered from
+        the date of the first report case. Using the APIs found on https://documenter.getpostman.com/view/10808728/SzS8rjbc?version=latest,
+        specifically the 'Day One Total'</p>
+    </div>
+
+    <script>
+        autocomplete(document.getElementById("searchedCountry"), countries);
+    </script>
+</body>
+</html>

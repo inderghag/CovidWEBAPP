@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Covid Stats Tracker</title>
+
+    <link rel="stylesheet" type="text/css" href="{%static 'DEMOAPP/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'DEMOAPP/bootstrap.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="{% static 'DEMOAPP/scripts.js' %}"></script>
+</head>
+<body>
+    <div class="headingContainer">
+        <h1><a href="{% url 'home-page' %}">CoronaVirus Stats Tracker</a></h1>
+    </div>
+
+    <canvas id="casesChart" width="500" height="200"></canvas>
+    <script>
+        var deathArray = [];
+        var confirmedArray = [];
+        var activeArray = [];
+        var recoveredArray = [];
+        var dateLabel = [];
+
+        {%for item in countryStats%}
+            deathArray.push('{{item.Deaths}}');
+            confirmedArray.push('{{item.Confirmed}}');
+            activeArray.push('{{item.Active}}');
+            recoveredArray.push('{{item.Recovered}}');
+            dateLabel.push('{{item.Date}}');
+        {% endfor %}
+        function createGraph()
+        {
+            var ctx = document.getElementById('casesChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dateLabel,
+                    datasets: [{
+                        label: 'Total Confirmed Cases',
+                        data: confirmedArray,
+                        borderColor: 'rgb(162, 116, 107)',
+                        backgroundColor:'rgb(162, 116, 107, 0.1)',
+                        borderWidth: 4
+                    }, {
+                        label: 'Total Deaths',
+                        data: deathArray,
+                        borderColor: 'rgb(229, 38, 0)',
+                        backgroundColor: 'rgb(229, 38, 0, 0.1)',
+                        borderWidth: 4
+                    }, {
+                        label: 'Recovered',
+                        data: recoveredArray,
+                        borderColor: 'rgb(0, 76, 229)',
+                        backgroundColor: 'rgb(0, 76, 229, 0.1)',
+                        borderWidth: 4
+                    },
+                    {
+                        label: 'Active Cases',
+                        data: activeArray,
+                        borderColor: 'rgb(76, 229, 0)',
+                        backgroundColor: 'rgb(76, 229, 0, 0.1)',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                 beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        createGraph();
+    </script>
+
+    <!--{%for item in countryStats%}
+        <p>{{item.Confirmed}}</p>
+    {% endfor %}-->
+
+</body>
+</html>
